@@ -1,0 +1,37 @@
+name: store
+
+services:
+
+  db:
+    image: postgres:17.6
+    hostname: db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./volume/db:/var/lib/postgresql/data
+
+  account:
+    image: humbertosandmann/account
+    hostname: account
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+
+  auth:
+    image: humbertosandmann/auth
+    hostname: auth
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+
+  gateway:
+    image: humbertosandmann/gateway
+    ports:
+      - 8080:8080
