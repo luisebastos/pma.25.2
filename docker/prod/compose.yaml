@@ -33,5 +33,12 @@ services:
 
   gateway:
     image: humbertosandmann/gateway
+    deploy:
+      replicas: 5
+
+  loadbalancer:
+    image: nginx:latest
+    volumes:
+      - ./setup/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - 8080:8080
+      - 80:80
