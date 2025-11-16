@@ -34,7 +34,7 @@ services:
   gateway:
     image: humbertosandmann/gateway
     deploy:
-      replicas: 5
+      replicas: 1
 
   loadbalancer:
     image: nginx:latest
